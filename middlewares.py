@@ -9,13 +9,14 @@ def auth():
     def _auth(f):
         @wraps(f)
         def __auth(*args, **kwargs):
-            key = request.args.get('key')
-            # print(key)
-            # print(os.getenv('API_KEY'))
+            key = request.headers.get('key')
             if key:
                 if key == os.getenv('API_KEY'):
                     print("Authentification successful")
-                    return f()
+                    if kwargs.get('pid'):
+                        return f(pid=kwargs.get('pid'))
+                    else:
+                        return f()
                 else:
                     return "Inavlid API key"
                     # return redirect('/')

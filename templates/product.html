@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    EasyBuy | {{ product.name }}
+{% endblock %}
+
+{% block body %}
+
+<div class="container content">
+    <div class="jumbotron home-spacer" id="products-jumbotron">
+        <h1>{{product.name}}</h1>
+    </div>
+    <hr>
+    <div class="text-center">
+        <div class="product-container container-fluid" id="{{product.id}}">
+            <div class="image-container">
+                <img src={{ "../static/images/" + product.image_url + ".jpg" }} alt="product-image">
+            </div>
+            <div class="caption">
+                <h3>{{ product.name }}</h3>
+                <p>Category: {{ product.category }}</p>
+                <p>Price: {{ product.price }}</p>
+                <p>Description: {{ product.description }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

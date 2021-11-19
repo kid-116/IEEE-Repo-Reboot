@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 import os
 
@@ -12,11 +12,6 @@ app.config['UPLOAD_FOLDER'] = os.path.join('static', 'images')
 db = SQLAlchemy(app)
 
 from views import *
-
-@app.route('/', methods=['GET'])
-def home():
-    products = getAll()
-    return render_template('index.html', products=products)
 
 if __name__ == '__main__':
     db.create_all()
