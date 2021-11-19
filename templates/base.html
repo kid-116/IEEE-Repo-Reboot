@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- Bootstrap -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" >
+        <!-- jQuery --> 
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <!-- JavaScript --> 
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <link href="../static/css/main.css" rel="stylesheet" type="text/css"/>
+        <title>
+            {% block title %}
+            {% endblock %}
+        </title>
+    </head>
+    <body>
+        <header>
+            <nav class="navbar navbar-inverse navbar-fixed-top">
+                <div class="container">
+                    <div class="navbar-header">
+                        <a class="navbar-brand" href="#">Easy Buy</a>
+                    </div>
+                </div>
+            </nav>
+        </header>
+        <main>
+            {% block body %}
+            {% endblock %}
+        </main>
+        <footer>
+            <div class="container footer">
+                <p>Copyright © EasyBuy. All Rights<br>
+                Reserved | Contact Us: +91 98989 87878”.</p>
+            </div>
+        </footer>
+    </body>
+</html>
