@@ -1,5 +1,7 @@
 from app import db
 
+SHORT_TITLE = 17
+
 class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True, unique=True)
     name = db.Column(db.String(80) )
@@ -15,11 +17,11 @@ class Product(db.Model):
         self.category = category
         self.image_url = image_url
 
-    def getShortDesc(self):
-        if len(self.description) < 10:
-            return self.description
+    def getShortName(self):
+        if len(self.name) < SHORT_TITLE:
+            return self.name
         else:
-            return self.description[:10] + '...'
+            return self.name[:SHORT_TITLE] + '...'
 
     def __repr__(self):
         return str(self.image_url)
@@ -51,20 +53,20 @@ def updateById(pid, **kwargs):
         if new_vals:
             Product.query.filter_by(id=pid).update(new_vals)
             db.session.commit()
-            print("Product updated successfully")
+            print(f"Product {pid} updated successfully")
         else:
             print("Invalid field(s)")
     else:
-        print("Product not found")
+        print("Product with id {pid} not found")
 
 def deleteSpecific(pid):
     found = Product.query.filter_by(id=pid).first()
     if found:
         db.session.delete(found)
         db.session.commit()
-        print("Product deleted successfully")
+        print(f"Product {pid} deleted successfully")
     else:
-        print("Product not found")
+        print(f"Product with id {pid} not found")
 
 def deleteAll():
     if Product.query.first():
@@ -76,13 +78,30 @@ def deleteAll():
 
 def getSpecific(pid):
     found = Product.query.filter_by(id=pid).first()
-    print(found)
     if found:
-        print("Product found")
+        print(f"Product {pid} found")
     else:
-        print("Product not found")
+        print(f"Product with id {pid} not found")
     return found
         
 def getAll():
     return Product.query.all()
 
+def getByCategory(cat):
+    found = Product.query.filter_by(category= cat)
+    if found:
+        print(f"Products found in {cat}")
+    else:
+        print(f"No products found in {cat}")
+    return found
+
+def getCategories():
+    found = Product.query.all()
+    if found:
+        return [prod.category for prod in found]
+    else:
+        print("No products found")
+    return None
+
+
+    

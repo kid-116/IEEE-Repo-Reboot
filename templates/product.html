@@ -5,25 +5,25 @@
 {% endblock %}
 
 {% block body %}
-
 <div class="container content">
-    <div class="jumbotron home-spacer" id="products-jumbotron">
-        <h1>{{product.name}}</h1>
-    </div>
-    <hr>
-    <div class="text-center">
-        <div class="product-container container-fluid" id="{{product.id}}">
+    <a href="../../"><i class="fas fa-arrow-circle-left"></i></a>
+    <div class="row product-container" id="{{product.id}}">
+        <div class="col-sm-12 col-md-8">
             <div class="image-container">
                 <img src={{ "../static/images/" + product.image_url + ".jpg" }} alt="product-image">
             </div>
-            <div class="caption">
-                <h3>{{ product.name }}</h3>
-                <p>Category: {{ product.category }}</p>
-                <p>Price: {{ product.price }}</p>
-                <p>Description: {{ product.description }}</p>
+        </div>
+        <div class="col-sm-12 col-md-4">
+            <div class="product-details">
+                <h2 class="product-name">{{product.name}}</h2>
+                <p class="product-category">↳ {{ product.category }}</p>
+                <p class="product-desc">{{ product.description }}</p>
+                <hr>
+                <p class="product-price">₹{{ product.price }}</p>
+                <button class="btn btn-secondary product-buy">Add to Cart</button>
+                <button class="btn btn-dark product-buy">Buy Now</button>
             </div>
         </div>
     </div>
 </div>
-
 {% endblock %}
