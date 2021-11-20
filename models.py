@@ -88,11 +88,11 @@ def getAll():
     return Product.query.all()
 
 def getByCategory(cat):
-    found = Product.query.filter_by(category= cat)
+    found = Product.query.filter_by(category=cat).all()
     if found:
         print(f"Products found in {cat}")
     else:
-        print(f"No products found in {cat}")
+        print(f"No product found in {cat}")
     return found
 
 def getCategories():

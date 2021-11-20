@@ -1,10 +1,21 @@
-from flask.wrappers import Request
 from app import app
 from models import *
 from flask import render_template, request, redirect
 from middlewares import auth
 import os
 from werkzeug.utils import secure_filename
+from nlp_search import sortProducts
+
+def getCat(cat):
+    category = ""
+    words = cat.split('-')
+    for word in words:
+        if word != 'and':
+            category += word.capitalize() + " "
+        else:
+            category += word + " "
+    return category[:-1]
+
 
 def upload_image(image, name):
     print(image, name)
@@ -71,7 +82,19 @@ def getOne(pid):
 @app.route('/', methods=['GET'])
 def home():
     products = getAll()
-    return render_template('index.html', products=products)
+    return render_template('index.html', products=products, isHomePage = True)
+
+@app.route('/products/categories/<cat>', methods=['GET'])
+def getCategory(cat):
+    cat = getCat(cat)
+    products = getByCategory(cat)
+    return render_template('index.html', products=products, isHomePage = False, category=cat)
+
+@app.route('/products/search', methods=["POST"])
+def searchProducts():
+    products = sortProducts(request.body.get('query'))
+    return render_template('index.html', products = products, isHomePage = False)
+
 
 @app.route('/test', methods=['GET'])
 @auth()

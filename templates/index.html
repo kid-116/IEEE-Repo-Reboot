@@ -6,11 +6,20 @@
 
 {% block body %}
     <div class="container content">
+        {% if isHomePage or category %}
         <div class="mt-4 p-5 text-white rounded" id="hero">
+            {% if isHomePage %}
             <h1>Welcome to EasyBuy!</h1>
             <p>Anything and everything you'd ever need, we're here for you.</p>
+            {% else %}
+            <h1>{{category}}</h1>
+            {% endif %}
         </div>
+        {% endif %}
         <div class="row">
+            {% if not products %}
+                <h3>No products found</h3>
+            {% else %}
             {% for product in products %}
                 <div class="col-md-4 col-sm-12" id="{{product.id}}">
                     <div class = "card product-card">
@@ -24,6 +33,7 @@
                     </div>
                 </div>
             {% endfor %}
+            {% endif %}
         </div>
     </div>
     <br>

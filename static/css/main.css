@@ -67,11 +67,11 @@ h1 {
     font-size: 4rem;
 }
 
-@media only screen and (max-width: 600px) {
+/* @media only screen and (max-width: 600px) {
     .product-details {
         
     }
-}
+} */
 
 .product-details {
     margin: 2rem;
@@ -125,10 +125,15 @@ h3 {
 
 .fa-shopping-cart {
     display: inline-block;
-    padding-right: 2rem;
+    padding-right: 1rem;
+    margin-left: 1rem;
     font-size: 1.5rem;
     /* align-items: center; */
     color: white;
+}
+
+.dropdown button {
+    background-color: var(--grey);
 }
 
 .fa-arrow-circle-left {
@@ -171,4 +176,10 @@ h3 {
 
 .row div {
     margin-bottom: 1rem;
+}
+
+.no-produts {
+    font-family: 'Quicksand';
+    font-weight: 900;
+    font-size: 2rem;
 }
