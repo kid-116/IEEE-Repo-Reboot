@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    EasyBuy | Products
+{% endblock %}
+
+{% block body %}
+    <div class="container content">
+        {% if isHomePage or category %}
+        <div class="mt-4 p-5 text-white rounded" id="hero">
+            {% if isHomePage %}
+            <h1>Welcome to EasyBuy!</h1>
+            <p>Anything and everything you'd ever need, we're here for you.</p>
+            {% else %}
+            <h1>{{category}}</h1>
+            {% endif %}
+        </div>
+        {% endif %}
+        <div class="main-container">
+
+            {% if spellCheck %}
+                <form action="/products/search" method="POST" id="search-form">
+                    <input type="hidden" name="query" id="query" value="{{ spellCheck }}">
+                    <input type="hidden" name="isSpellChecked" id="isSpellChecked" value="{{ True }}">
+                    <p id="spell-check">Did you mean : <a onclick="document.getElementById('search-form').submit()" id="corrected-query">{{ spellCheck }}</a></p>
+                </form>
+            {% endif %}
+
+            {% if not products %}
+                <h3 class="no-products">No products found</h3>
+            {% else %}
+            <div class="row">
+                {% for product in products %}
+                    <div class="col-md-4 col-sm-12" id="{{product.id}}">
+                        <div class = "card product-card">
+                            <div class="card-img-top">
+                                {% if product.image_url %}
+                                <img src={{ "static/images/" + product.image_url + ".jpg" }} alt="product-image">
+                                {% else %}
+                                <img src={{ "https://picsum.photos/200/300" }} alt="product-image">
+                                {% endif %}
+                            </div>
+                            <div class="card-body">
+                                <h3 class="card-title"><a href="/products/{{product.id}}">{{ product.getShortName() }}</a></h3>
+                                <p>₹{{ product.price }}</p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    <br>
+    <br>
+{% endblock %}

@@ -1,5 +1,5 @@
-.env
+flask_server/.env
 __pycache__/
-venv/
-*.db
-static/images/
+flask_server/venv/
+flask_server/*.db
+static/images/*
