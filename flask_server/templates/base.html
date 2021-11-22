@@ -20,19 +20,22 @@
         <header>
             <nav class="navbar navbar-dark bg-dark">
                 <div class="container-fluid" style="width: 75%">
-                  <a class="navbar-brand brand-logo" href="/">Easy Buy</a>
-                  <form class="d-flex nav-controls" action="/products/search" method="POST">
-                    <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                            Categories
-                        </button>
-                        <ul class="dropdown-menu" id="dropdown-menu">
-                        </ul>
-                    </div>
-                    <i class="fas fa-shopping-cart"></i>
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="query">
-                    <button class="btn btn-outline-light" type="submit">Search</button>
-                  </form>
+                    <a class="navbar-brand brand-logo" href="/">Easy Buy</a>
+                    <form class="d-flex nav-controls" action="/products/search" method="POST">
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                Categories
+                            </button>
+                            <ul class="dropdown-menu" id="dropdown-menu">
+                            </ul>
+                        </div>
+                        <i class="fas fa-shopping-cart"></i>
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="query">
+                        <button class="btn btn-outline-light" type="submit" id="search-button">Search</button>
+                        <div class="spinner-grow text-secondary" role="status" id="spinner">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </form>
                 </div>
             </nav>
         </header>

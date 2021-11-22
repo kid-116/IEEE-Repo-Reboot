@@ -199,3 +199,9 @@ h3 {
 main {
   padding-top: 2rem;
 }
+
+.spinner-grow {
+  width: 4.5rem;
+  margin-left: 2rem;
+  visibility: hidden;
+}

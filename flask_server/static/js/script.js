@@ -11,3 +11,10 @@ categories.forEach((category)=>{
     li.appendChild(a);
     ul.appendChild(li);
 });
+
+const searchButton = document.getElementById('search-button');
+const spinner = document.getElementById('spinner');
+searchButton.onclick = function() {
+    console.log('searching...');
+    spinner.style.visibility = 'visible';
+}
