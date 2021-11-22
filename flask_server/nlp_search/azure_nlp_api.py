@@ -13,7 +13,8 @@ def allowSelfSignedHttps(allowed):
 
 allowSelfSignedHttps(True) # this line is needed if you use self-signed certificate in your scoring service.
 
-def getCategories(query):
+def getCategories(query, ptr):
+    print('getting categories')
     data = {
         "Inputs": {
             "input1":
@@ -29,23 +30,22 @@ def getCategories(query):
     }
 
     body = str.encode(json.dumps(data))
-
-    url = 'http://eae21c18-c61a-4325-916f-95023e554c25.centralindia.azurecontainer.io/score'
     headers = {'Content-Type':'application/json', 'Authorization':('Bearer '+ os.getenv('AZURE_NLP_KEY'))}
 
-    req = urllib.request.Request(url, body, headers)
+    req = urllib.request.Request(os.getenv('AZURE_NLP_ENDPOINT'), body, headers)
 
     try:
+        print('before req')
         response = urllib.request.urlopen(req)
         result = response.read()
+        print('after req')
         main_result = json.loads(str(result)[2:-1])['Results']['WebServiceOutput0'][0]
         main_result.pop('Scored Labels')
         l = list(main_result.items())
-        probableCats = []
         l.sort(key = lambda cat: cat[1], reverse=True)
-        for cat in l[:3]:
-            probableCats.append(cat[0][21:])  
-        return probableCats
+        for i, cat in enumerate(l[:3]):
+            ptr[i] = cat[0][21:]  
+        # return probableCats
     except urllib.error.HTTPError as error:
         print("The request failed with status code: " + str(error.code))
         # Print the headers - they include the requert ID and the timestamp, which are useful for debugging the failure

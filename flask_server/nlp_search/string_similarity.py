@@ -1,10 +1,14 @@
 from thefuzz import fuzz
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 def sortProducts(prods, query):
     filteredProds = []
     for prod in prods:
         score = fuzz.token_set_ratio(prod.name, query)
-        if score > 35:
+        if score > int(os.getenv('SIMILARITY_CUTOFF')):
             filteredProds.append(
                 {"product": prod, "score": score})
     print(filteredProds)

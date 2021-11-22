@@ -1,6 +1,9 @@
 from app import db
+from sqlalchemy import func
+from dotenv import load_dotenv
+import os
 
-SHORT_TITLE = 17
+load_dotenv()
 
 class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True, unique=True)
@@ -18,10 +21,10 @@ class Product(db.Model):
         self.image_url = image_url
 
     def getShortName(self):
-        if len(self.name) < SHORT_TITLE:
+        if len(self.name) < int(os.getenv('SHORT_TITLE_LEN')):
             return self.name
         else:
-            return self.name[:SHORT_TITLE] + '...'
+            return self.name[:int(os.getenv('SHORT_TITLE_LEN'))] + '...'
 
     def __repr__(self):
         return str(self.name)
@@ -84,8 +87,11 @@ def getSpecific(pid):
         print(f"Product with id {pid} not found")
     return found
         
-def getAll():
-    return Product.query.all()
+def getAll(size=-1):
+    if size==-1:
+        return Product.query.all()
+    else:
+        return Product.query.order_by(func.random()).limit(size).all()
 
 def getByCategory(cats):
     found = Product.query.filter(Product.category.in_(cats)).all()

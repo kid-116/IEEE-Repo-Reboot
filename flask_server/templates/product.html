@@ -10,7 +10,11 @@
     <div class="row product-container" id="{{product.id}}">
         <div class="col-sm-12 col-md-8">
             <div class="image-container">
-                <img src={{ "../static/images/" + product.image_url + ".jpg" }} alt="product-image">
+                {% if product.image_url %}
+                <img src={{ "static/images/" + product.image_url + ".jpg" }} alt="product-image">
+                {% else %}
+                <img src={{ "https://picsum.photos/200/300?random=" + product.id|string }} alt="product-image">
+                {% endif %}
             </div>
         </div>
         <div class="col-sm-12 col-md-4">

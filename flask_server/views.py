@@ -1,14 +1,21 @@
+from flask.wrappers import Response
 from nlp_search.spell_check_api import spellCheck
 from app import app
 from models import *
-from flask import render_template, request, redirect
+from flask import render_template, request, redirect, stream_with_context, render_template_string
 from middlewares import auth
 import os
 from werkzeug.utils import secure_filename
 from nlp_search.string_similarity import sortProducts
 from nlp_search.azure_nlp_api import getCategories
+import threading
+import time
+from dotenv import load_dotenv
+
+load_dotenv()
 
 def getCat(cat):
+    print(f"Parsing {cat} to be used as a url")
     category = ""
     words = cat.split('-')
     for word in words:
@@ -93,7 +100,7 @@ def getOne(pid):
 
 @app.route('/', methods=['GET'])
 def home():
-    products = getAll()
+    products = getAll(int(os.getenv('PAGE_LIMIT')))
     return render_template('index.html', products=products, isHomePage=True)
 
 
@@ -111,12 +118,26 @@ def searchProducts():
         new_query = spellCheck(request.values.get('query'))
         if new_query == query:
             isSpellChecked = True
-    probableCategories = getCategories(query)
-    print(probableCategories)
-    products = getByCategory(probableCategories)
-    print(products)
-    products = sortProducts(products, query)
-    if isSpellChecked:
-        return render_template('index.html', products=products, isHomePage=False)
-    else:
-        return render_template('index.html', products=products, isHomePage=False, spellCheck=new_query)
+
+    probableCategories = [None] * 3
+    callThread = threading.Thread(target=getCategories, args=(query, probableCategories,))
+    callThread.start()
+
+    def generate():
+        while callThread.is_alive():
+            time.sleep(1)
+            # print(':(')
+            yield ''
+        products = getByCategory(probableCategories)
+        products = sortProducts(products, query)
+        if not products:
+            products = getAll()
+            products = sortProducts(products, query)
+        if isSpellChecked:
+            yield render_template('index.html', products=products, isHomePage=False)
+        else:
+            yield render_template('index.html', products=products, isHomePage=False, spellCheck=new_query)
+    
+    return Response(stream_with_context(generate()))
+
+    

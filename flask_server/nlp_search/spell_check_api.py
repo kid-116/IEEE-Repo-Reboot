@@ -6,9 +6,6 @@ import os
 load_dotenv()
 
 def spellCheck(query):
-    api_key = os.getenv('AZURE_SPELL_KEY')
-    endpoint = "https://api.bing.microsoft.com/v7.0/SpellCheck"
-
     data = {'text': query}
 
     params = {
@@ -18,11 +15,12 @@ def spellCheck(query):
 
     headers = {
         'Content-Type': 'application/x-www-form-urlencoded',
-        'Ocp-Apim-Subscription-Key': api_key,
+        'Ocp-Apim-Subscription-Key': os.getenv('AZURE_SPELL_KEY'),
     }
 
-    response = requests.post(endpoint, headers=headers,
+    response = requests.post(os.getenv('AZURE_SPELL_ENDPOINT'), headers=headers,
                              params=params, data=data)
+    print(response)
 
     json_response = response.json()
     response_suggestions_list = json.loads(

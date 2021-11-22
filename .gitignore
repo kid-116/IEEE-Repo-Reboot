@@ -1,5 +1,5 @@
 flask_server/.env
 __pycache__/
 flask_server/venv/
-flask_server/*.db
 static/images/*
+flask_server/__pycache__/
