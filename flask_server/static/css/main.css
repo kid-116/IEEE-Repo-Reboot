@@ -8,7 +8,6 @@
 
 #hero {
   background-color: var(--grey);
-  margin-top: 60px;
   box-shadow: 7px 5px #1a293099;
   margin-bottom: 2rem;
 }
@@ -195,4 +194,8 @@ h3 {
   color: var(--grey);
   text-decoration: underline;
   cursor: pointer;
+}
+
+main {
+  padding-top: 2rem;
 }

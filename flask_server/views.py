@@ -5,8 +5,8 @@ from flask import render_template, request, redirect
 from middlewares import auth
 import os
 from werkzeug.utils import secure_filename
-from nlp_search.nlp_search_api import sortProducts
-
+from nlp_search.string_similarity import sortProducts
+from nlp_search.azure_nlp_api import getCategories
 
 def getCat(cat):
     category = ""
@@ -34,15 +34,18 @@ def upload_image(image, name):
 @app.route('/products/add', methods=['POST'])
 @auth()
 def addProduct():
+    image_url = upload_image(
+        request.files.get('image'),
+        request.form.get('name')
+    )
+    if not image_url:
+        image_url = ''
     create(
         request.form.get('name'),
         request.form.get('description'),
         request.form.get('price'),
         request.form.get('category'),
-        upload_image(
-            request.files.get('image'),
-            request.form.get('name')
-        )
+        image_url
     )
     return redirect('/')
 
@@ -100,7 +103,6 @@ def getCategory(cat):
     products = getByCategory(cat)
     return render_template('index.html', products=products, isHomePage=False, category=cat)
 
-
 @app.route('/products/search', methods=["POST"])
 def searchProducts():
     isSpellChecked = request.values.get('isSpellChecked')
@@ -109,16 +111,12 @@ def searchProducts():
         new_query = spellCheck(request.values.get('query'))
         if new_query == query:
             isSpellChecked = True
-        else:
-            query = new_query
-    products = sortProducts(query)
+    probableCategories = getCategories(query)
+    print(probableCategories)
+    products = getByCategory(probableCategories)
+    print(products)
+    products = sortProducts(products, query)
     if isSpellChecked:
         return render_template('index.html', products=products, isHomePage=False)
     else:
-        return render_template('index.html', products=products, isHomePage=False, spellCheck=query)
-
-
-@app.route('/test', methods=['GET'])
-@auth()
-def test():
-    return 'Hello!'
+        return render_template('index.html', products=products, isHomePage=False, spellCheck=new_query)

@@ -11,7 +11,7 @@ def auth():
         def __auth(*args, **kwargs):
             key = request.headers.get('key')
             if key:
-                if key == os.getenv('API_KEY'):
+                if key == os.getenv('ADMIN_KEY'):
                     print("Authentification successful")
                     if kwargs.get('pid'):
                         return f(pid=kwargs.get('pid'))

@@ -1,9 +1,12 @@
 import requests
 import json
+from dotenv import load_dotenv
+import os
 
+load_dotenv()
 
 def spellCheck(query):
-    api_key = "d1b5e17acff24b10b5da9cfccf039aee"
+    api_key = os.getenv('AZURE_SPELL_KEY')
     endpoint = "https://api.bing.microsoft.com/v7.0/SpellCheck"
 
     data = {'text': query}
@@ -29,5 +32,3 @@ def spellCheck(query):
             word['token'], word['suggestions'][0]['suggestion'])
 
     return query
-
-# print(spellCheck("helo worl"))

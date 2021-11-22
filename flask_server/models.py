@@ -24,7 +24,7 @@ class Product(db.Model):
             return self.name[:SHORT_TITLE] + '...'
 
     def __repr__(self):
-        return str(self.image_url)
+        return str(self.name)
 
 def create(name, description, price, category, image_url):
     product = Product(
@@ -87,12 +87,12 @@ def getSpecific(pid):
 def getAll():
     return Product.query.all()
 
-def getByCategory(cat):
-    found = Product.query.filter_by(category=cat).all()
+def getByCategory(cats):
+    found = Product.query.filter(Product.category.in_(cats)).all()
     if found:
-        print(f"Products found in {cat}")
+        print(f"Products found in {cats}")
     else:
-        print(f"No product found in {cat}")
+        print(f"No product found in {cats}")
     return found
 
 def getCategories():
