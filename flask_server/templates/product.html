@@ -6,21 +6,16 @@
 
 {% block body %}
 <div class="container content">
-    <a href="../../"><i class="fas fa-arrow-circle-left"></i></a>
     <div class="row product-container" id="{{product.id}}">
         <div class="col-sm-12 col-md-8">
             <div class="image-container">
-                {% if product.image_url %}
-                <img src={{ "static/images/" + product.image_url + ".jpg" }} alt="product-image">
-                {% else %}
-                <img src={{ "https://picsum.photos/200/300?random=" + product.id|string }} alt="product-image">
-                {% endif %}
+                <img src={{ product.image_url }} alt="product-image">
             </div>
         </div>
         <div class="col-sm-12 col-md-4">
             <div class="product-details">
                 <h2 class="product-name">{{product.name}}</h2>
-                <p class="product-category">↳ {{ product.category }}</p>
+                <p class="product-category">↳ <a href="/products/categories/{{ categoryUrl }}">{{ product.category }}</a></p>
                 <p class="product-desc">{{ product.description }}</p>
                 <hr>
                 <p class="product-price">₹{{ product.price }}</p>

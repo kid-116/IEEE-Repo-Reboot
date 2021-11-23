@@ -22,7 +22,8 @@
                 <form action="/products/search" method="POST" id="search-form">
                     <input type="hidden" name="query" id="query" value="{{ spellCheck }}">
                     <input type="hidden" name="isSpellChecked" id="isSpellChecked" value="{{ True }}">
-                    <p id="spell-check">Did you mean : <a onclick="document.getElementById('search-form').submit()" id="corrected-query">{{ spellCheck }}</a></p>
+                    <p class="search-spell" id="spell-check">Showing results for {{ spellCheck }}</p>
+                    <p class="search-spell">Search instead for : <a onclick="document.getElementById('search-form').submit()" id="old-query">{{ oldQuery }}</a></p>
                 </form>
             {% endif %}
 
@@ -34,11 +35,7 @@
                     <div class="col-md-4 col-sm-12" id="{{product.id}}">
                         <div class = "card product-card">
                             <div class="card-img-top">
-                                {% if product.image_url %}
-                                <img src={{ "static/images/" + product.image_url + ".jpg" }} alt="product-image">
-                                {% else %}
-                                <img src={{ "https://picsum.photos/200/300?random=" + product.id|string }} alt="product-image">
-                                {% endif %}
+                                <img src={{ product.image_url }} alt="product-image">
                             </div>
                             <div class="card-body">
                                 <h3 class="card-title"><a href="/products/{{product.id}}">{{ product.getShortName() }}</a></h3>
