@@ -14,6 +14,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+
 def getCat(cat):
     print(f"Parsing {cat} to be used as a url")
     category = ""
@@ -26,33 +27,34 @@ def getCat(cat):
     return category[:-1]
 
 
-def upload_image(image, name):
-    print(image, name)
-    if image and name:
-        image.save(os.path.join(
-            app.config['UPLOAD_FOLDER'], secure_filename(name + '.jpg')))
-        print("Image added successfully")
-        return name
-    else:
-        print("No image found")
-        return False
+# def upload_image(image, name):
+#     print(image, name)
+#     if image and name:
+#         image.save(os.path.join(
+#             app.config['UPLOAD_FOLDER'], secure_filename(name + '.jpg')))
+#         print("Image added successfully")
+#         return name
+#     else:
+#         print("No image found")
+#         return False
 
 
 @app.route('/products/add', methods=['POST'])
 @auth()
 def addProduct():
-    image_url = upload_image(
-        request.files.get('image'),
-        request.form.get('name')
-    )
-    if not image_url:
-        image_url = ''
+    name = request.form.get('name')
+    desc = request.form.get('desc')
+    price = request.form.get('price')
+    category = request.form.get('category')
+    image = request.form.get('image')
+    if not name or not price or not image:
+        return 'Error! Provide non-nullable fields'
     create(
-        request.form.get('name'),
-        request.form.get('description'),
-        request.form.get('price'),
-        request.form.get('category'),
-        image_url
+        name=name,
+        description=desc,
+        price=price,
+        category=category,
+        image_url=image
     )
     return redirect('/')
 
@@ -60,20 +62,12 @@ def addProduct():
 @app.route('/products/update/<pid>', methods=['PATCH'])
 @auth()
 def update(pid):
-    if request.form.get('name'):
-        name = request.form.get('name')
-    else:
-        name = getSpecific(pid).name
     updateById(
         pid,
         name=request.form.get('name'),
         description=request.form.get('description'),
         price=request.form.get('price'),
         category=request.form.get('category'),
-        image_url=upload_image(
-            request.files.get('image'),
-            name
-        ),
     )
     return redirect('/')
 
@@ -95,7 +89,7 @@ def deleteOne(pid):
 @app.route('/products/<pid>', methods=['GET'])
 def getOne(pid):
     product = getSpecific(pid)
-    return render_template('product.html', product=product)
+    return render_template('product.html', product=product, categoryUrl=product.category.lower().replace(" ", '-'))
 
 
 @app.route('/', methods=['GET'])
@@ -107,8 +101,9 @@ def home():
 @app.route('/products/categories/<cat>', methods=['GET'])
 def getCategory(cat):
     cat = getCat(cat)
-    products = getByCategory(cat)
+    products = getByCategory([cat])
     return render_template('index.html', products=products, isHomePage=False, category=cat)
+
 
 @app.route('/products/search', methods=["POST"])
 def searchProducts():
@@ -118,9 +113,13 @@ def searchProducts():
         new_query = spellCheck(request.values.get('query'))
         if new_query == query:
             isSpellChecked = True
+        else:
+            old_query = query
+            query = new_query
 
     probableCategories = [None] * 3
-    callThread = threading.Thread(target=getCategories, args=(query, probableCategories,))
+    callThread = threading.Thread(
+        target=getCategories, args=(query, probableCategories,))
     callThread.start()
 
     def generate():
@@ -136,8 +135,6 @@ def searchProducts():
         if isSpellChecked:
             yield render_template('index.html', products=products, isHomePage=False)
         else:
-            yield render_template('index.html', products=products, isHomePage=False, spellCheck=new_query)
-    
-    return Response(stream_with_context(generate()))
+            yield render_template('index.html', products=products, isHomePage=False, spellCheck=query, oldQuery=old_query)
 
-    
+    return Response(stream_with_context(generate()))

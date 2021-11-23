@@ -95,7 +95,7 @@ a:hover {
 h3 {
   font-family: "Quicksand";
   font-weight: 900;
-  font-size: 2rem;
+  font-size: 1.5rem;
 }
 
 .product-card p {
@@ -186,11 +186,15 @@ h3 {
 
 #spell-check {
   padding-top: 2rem;
-  font-style: italic;
-  font-size: 1.5rem;
+  margin-bottom: 0;
 }
 
-#corrected-query:hover {
+.search-spell {
+  font-style: italic;
+  font-size: 1rem;
+}
+
+#old-query:hover {
   color: var(--grey);
   text-decoration: underline;
   cursor: pointer;

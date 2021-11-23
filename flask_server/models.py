@@ -1,17 +1,18 @@
 from app import db
 from sqlalchemy import func
 from dotenv import load_dotenv
+from sqlalchemy import exc
 import os
 
 load_dotenv()
 
 class Product(db.Model):
-    id = db.Column(db.Integer, primary_key=True, unique=True)
-    name = db.Column(db.String(80) )
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80), unique=True, nullable=False)
     description = db.Column(db.Text)
-    price = db.Column(db.Integer)
-    category = db.Column(db.String(20))
-    image_url = db.Column(db.String(20))
+    price = db.Column(db.Integer, nullable=False)
+    category = db.Column(db.String(20), nullable=False)
+    image_url = db.Column(db.String(20), nullable=False)
 
     def __init__(self, name, description, price, category, image_url):
         self.name = name
@@ -29,18 +30,22 @@ class Product(db.Model):
     def __repr__(self):
         return str(self.name)
 
+
 def create(name, description, price, category, image_url):
     product = Product(
-        name=name, 
+        name=name,
         description=description,
         price=price,
         category=category,
         image_url=image_url
     )
-    print(f"{name} added successfully")
+    try:
+        db.session.add(product)
+        db.session.commit()
+        
+    except exc.SQLAlchemyError as e:
+        print(e)
 
-    db.session.add(product)
-    db.session.commit()
 
 def updateById(pid, **kwargs):
     print(kwargs)
@@ -52,15 +57,19 @@ def updateById(pid, **kwargs):
             data = kwargs[field]
             if data:
                 new_vals[field] = data
-        
+
         if new_vals:
-            Product.query.filter_by(id=pid).update(new_vals)
-            db.session.commit()
+            try:
+                Product.query.filter_by(id=pid).update(new_vals)
+                db.session.commit()
+            except exc.SQLAlchemyError as e:
+                print(e)
             print(f"Product {pid} updated successfully")
         else:
-            print("Invalid field(s)")
+            print("No new values found!")
     else:
         print("Product with id {pid} not found")
+
 
 def deleteSpecific(pid):
     found = Product.query.filter_by(id=pid).first()
@@ -71,6 +80,7 @@ def deleteSpecific(pid):
     else:
         print(f"Product with id {pid} not found")
 
+
 def deleteAll():
     if Product.query.first():
         Product.query.delete()
@@ -79,6 +89,7 @@ def deleteAll():
     else:
         print("No products found")
 
+
 def getSpecific(pid):
     found = Product.query.filter_by(id=pid).first()
     if found:
@@ -86,12 +97,14 @@ def getSpecific(pid):
     else:
         print(f"Product with id {pid} not found")
     return found
-        
+
+
 def getAll(size=-1):
-    if size==-1:
+    if size == -1:
         return Product.query.all()
     else:
         return Product.query.order_by(func.random()).limit(size).all()
+
 
 def getByCategory(cats):
     found = Product.query.filter(Product.category.in_(cats)).all()
@@ -101,6 +114,7 @@ def getByCategory(cats):
         print(f"No product found in {cats}")
     return found
 
+
 def getCategories():
     found = Product.query.all()
     if found:
@@ -108,6 +122,3 @@ def getCategories():
     else:
         print("No products found")
     return None
-
-
-    
