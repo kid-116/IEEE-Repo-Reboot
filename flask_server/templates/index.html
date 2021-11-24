@@ -17,15 +17,18 @@
         </div>
         {% endif %}
         <div class="main-container">
-
-            {% if spellCheck %}
-                <form action="/products/search" method="POST" id="search-form">
-                    <input type="hidden" name="query" id="query" value="{{ spellCheck }}">
-                    <input type="hidden" name="isSpellChecked" id="isSpellChecked" value="{{ True }}">
-                    <p class="search-spell" id="spell-check">Showing results for {{ spellCheck }}</p>
-                    <p class="search-spell">Search instead for : <a onclick="document.getElementById('search-form').submit()" id="old-query">{{ oldQuery }}</a></p>
-                </form>
-            {% endif %}
+            <div class="spell-check-container">
+                {% if query %}
+                <p class="search-spell" id="spell-check">Showing results for {{ query }}</p>
+                {% endif %}
+                {% if oldQuery %}
+                    <form action="/products/search" method="POST" id="search-form">
+                        <input type="hidden" name="query" id="query" value="{{ oldQuery }}">
+                        <input type="hidden" name="isSpellChecked" id="isSpellChecked" value="{{ True }}">
+                        <p class="search-spell">Search instead for : <a onclick="document.getElementById('search-form').submit()" id="old-query">{{ oldQuery }}</a></p>
+                    </form>
+                {% endif %}
+            </div>
 
             {% if not products %}
                 <h3 class="no-products">No products found</h3>

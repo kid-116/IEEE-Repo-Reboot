@@ -185,13 +185,17 @@ h3 {
 }
 
 #spell-check {
-  padding-top: 2rem;
   margin-bottom: 0;
 }
 
 .search-spell {
   font-style: italic;
   font-size: 1rem;
+  margin: 0;
+}
+
+.spell-check-container {
+  margin-bottom: 1.5rem;
 }
 
 #old-query:hover {

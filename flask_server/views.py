@@ -11,6 +11,7 @@ from nlp_search.azure_nlp_api import getCategories
 import threading
 import time
 from dotenv import load_dotenv
+import random
 
 load_dotenv()
 
@@ -25,18 +26,6 @@ def getCat(cat):
         else:
             category += word + " "
     return category[:-1]
-
-
-# def upload_image(image, name):
-#     print(image, name)
-#     if image and name:
-#         image.save(os.path.join(
-#             app.config['UPLOAD_FOLDER'], secure_filename(name + '.jpg')))
-#         print("Image added successfully")
-#         return name
-#     else:
-#         print("No image found")
-#         return False
 
 
 @app.route('/products/add', methods=['POST'])
@@ -89,6 +78,7 @@ def deleteOne(pid):
 @app.route('/products/<pid>', methods=['GET'])
 def getOne(pid):
     product = getSpecific(pid)
+    print(product.category)
     return render_template('product.html', product=product, categoryUrl=product.category.lower().replace(" ", '-'))
 
 
@@ -102,6 +92,8 @@ def home():
 def getCategory(cat):
     cat = getCat(cat)
     products = getByCategory([cat])
+    if len(products)> 30:
+        products = random.sample(products, 30)
     return render_template('index.html', products=products, isHomePage=False, category=cat)
 
 
@@ -133,8 +125,8 @@ def searchProducts():
             products = getAll()
             products = sortProducts(products, query)
         if isSpellChecked:
-            yield render_template('index.html', products=products, isHomePage=False)
+            yield render_template('index.html', products=products, isHomePage=False, query=query)
         else:
-            yield render_template('index.html', products=products, isHomePage=False, spellCheck=query, oldQuery=old_query)
+            yield render_template('index.html', products=products, isHomePage=False, query=query, oldQuery=old_query)
 
     return Response(stream_with_context(generate()))
