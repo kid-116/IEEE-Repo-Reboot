@@ -92,8 +92,8 @@ def home():
 def getCategory(cat):
     cat = getCat(cat)
     products = getByCategory([cat])
-    if len(products)> 30:
-        products = random.sample(products, 30)
+    if len(products)> os.getenv("PAGE_LIMIT"):
+        products = random.sample(products, os.getenv("PAGE_LIMIT"))
     return render_template('index.html', products=products, isHomePage=False, category=cat)
 
 

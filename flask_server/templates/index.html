@@ -19,7 +19,7 @@
         <div class="main-container">
             <div class="spell-check-container">
                 {% if query %}
-                <p class="search-spell" id="spell-check">Showing results for {{ query }}</p>
+                <p class="search-spell" id="spell-check">Showing results for {{ query }} ({{ products|length }})</p>
                 {% endif %}
                 {% if oldQuery %}
                     <form action="/products/search" method="POST" id="search-form">
