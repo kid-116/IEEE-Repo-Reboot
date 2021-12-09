@@ -17,7 +17,7 @@ def getCategories(query, ptr):
     print('getting categories')
     data = {
         "Inputs": {
-            "input1":
+            "WebServiceInput1":
             [
                 {
                     'title': query,

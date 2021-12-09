@@ -11,11 +11,10 @@ def sortProducts(prods, query):
         if score > int(os.getenv('SIMILARITY_CUTOFF')):
             filteredProds.append(
                 {"product": prod, "score": score})
-    print(filteredProds)
     if filteredProds:
         filteredProds.sort(key=lambda prod: prod['score'], reverse=True)
         sortedProds = [prod['product'] for prod in filteredProds]
-        print(sortedProds)
+        # print(sortedProds)
         return sortedProds
     else:
         return []

@@ -1,8 +1,10 @@
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 import os
+# from flask_ngrok import run_with_ngrok
 
 app = Flask(__name__, static_folder='static')
+# run_with_ngrok(app)
 
 # db configuration
 db_name = 'easybuy.db'
